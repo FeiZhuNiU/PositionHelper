@@ -15,11 +15,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/latitudeText"
-            android:text="latitude:"/>
+            android:text="latitude: "/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/longitudeText"
-            android:text="longitude:"/>
+            android:text="longitude: "/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/time_updated"
+            android:text="last update: "/>
     </LinearLayout>
 </RelativeLayout>
