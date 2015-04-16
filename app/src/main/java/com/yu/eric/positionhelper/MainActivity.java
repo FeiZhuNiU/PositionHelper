@@ -14,7 +14,7 @@ public class MainActivity extends Activity implements LocationWatcher{
     private TextView longitudeText;
     private TextView updateTime;
 
-    private static LocationHelper locationHelper = null;
+    private static Location location = null;
 
     private static final String TAG ="MainActivity";
 
@@ -28,8 +28,8 @@ public class MainActivity extends Activity implements LocationWatcher{
         updateTime = (TextView) findViewById(R.id.time_updated);
 
 
-        locationHelper = LocationHelper.getInstance();
-        locationHelper.addWatcher(this);
+        location = Location.getInstance();
+        location.addWatcher(this);
         updateView();
 
 //        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -105,9 +105,9 @@ public class MainActivity extends Activity implements LocationWatcher{
     }
 
     public void updateView(){
-        latitudeText.setText("latitude: " + String.valueOf(locationHelper.getLatitude()));
-        longitudeText.setText("longitude: " + String.valueOf(locationHelper.getLongitude()));
-        updateTime.setText("Last Update: " + locationHelper.getTime_lastUpdated());
+        latitudeText.setText("latitude: " + String.valueOf(location.getLatitude()));
+        longitudeText.setText("longitude: " + String.valueOf(location.getLongitude()));
+        updateTime.setText("Last Update: " + location.getDate());
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.yu.eric.positionhelper;
 
 import android.content.Context;
-import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
@@ -9,8 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -19,21 +16,21 @@ import java.util.List;
 /**
  * Created by lliyu on 4/15/2015.
  */
-public class LocationHelper {
+public class Location {
 
     private List<LocationWatcher> watchers;
 
-    private String TAG = "LocationHelper";
+    private String TAG = "Location";
 
-    private static LocationHelper locationHelper = null;
+    private static final Location location = new Location(ContextProvider.getContext());
 
 
     private double latitude = 0;
     private double longitude = 0;
-    private Date time_lastUpdated;
+    private Date date;
 
-    public Date getTime_lastUpdated() {
-        return time_lastUpdated;
+    public Date getDate() {
+        return date;
     }
 
     public double getLatitude() {
@@ -45,14 +42,14 @@ public class LocationHelper {
     }
 
 
-    private LocationHelper(final Context context){
+    private Location(final Context context){
 
         watchers = new ArrayList<>();
 
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         LocationListener locationListener = new LocationListener() {
             @Override
-            public void onLocationChanged(Location location) {
+            public void onLocationChanged(android.location.Location location) {
 
                 Log.i(TAG, "locationChanged:");
                 Log.i(TAG, "???" + location.getTime());
@@ -66,7 +63,7 @@ public class LocationHelper {
                 longitude = location.getLongitude();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(location.getTime());
-                time_lastUpdated = calendar.getTime();
+                date = calendar.getTime();
                 notifyWatchers();
             }
 
@@ -111,10 +108,8 @@ public class LocationHelper {
     * ???   http://blog.csdn.net/jason0539/article/details/23297037
     *
     * */
-    public static LocationHelper getInstance(){
-        if(locationHelper == null)
-            locationHelper = new LocationHelper(ContextProvider.getContext());
-        return locationHelper;
+    public static Location getInstance(){
+        return location;
     }
 
     public void addWatcher(LocationWatcher watcher){
