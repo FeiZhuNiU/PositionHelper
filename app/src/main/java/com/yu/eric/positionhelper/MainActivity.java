@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -25,8 +26,8 @@ import com.baidu.mapapi.model.LatLng;
 
 public class MainActivity extends Activity implements LocationWatcher{
 
-    private TextView latitudeText;
-    private TextView longitudeText;
+    private TextView systemLocationText;
+    private TextView baiduLocationText;
     private TextView updateTime;
     private MapView mapView;
 
@@ -44,8 +45,8 @@ public class MainActivity extends Activity implements LocationWatcher{
         setContentView(R.layout.activity_main);
 
 
-        latitudeText    = (TextView) findViewById(R.id.latitudeText);
-        longitudeText   = (TextView) findViewById(R.id.longitudeText);
+        systemLocationText = (TextView) findViewById(R.id.systemLocationText);
+        baiduLocationText = (TextView) findViewById(R.id.baiduLocationText);
         updateTime      = (TextView) findViewById(R.id.time_updated);
         mapView         = (MapView)  findViewById(R.id.bmapView);
 
@@ -98,35 +99,53 @@ public class MainActivity extends Activity implements LocationWatcher{
     }
 
     public void updateView(){
-        latitudeText.setText("latitude: " + String.valueOf(location.getLatitude()));
-        longitudeText.setText("longitude: " + String.valueOf(location.getLongitude()));
-        updateTime.setText("Last Update: " + location.getDate());
 
+        //update textView
+        if(location != null ) {
+            systemLocationText.setText("system: " + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
+            updateTime.setText("Last Update: " + location.getDate());
+            if(location.getBaidLocation() != null ) {
+                baiduLocationText.setText("baidu: " + String.valueOf(location.getBaidLocation().getLatitude()) + "/" + String.valueOf(location.getBaidLocation().getLongitude()));
+            }
+        }
+
+        //update Map View
         updateMapView();
 
     }
 
     private void updateMapView() {
+
         BaiduMap map = mapView.getMap();
+
+        //tag star.png at system detected location
         LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
+        tagMap(map, point, R.drawable.star);
+        animateMapToPoint(map, point);
 
-        Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(), R.drawable.star);
-        Matrix matrix = new Matrix();
-        matrix.postScale((float)20.0/bitmapOrg.getWidth(),(float)20.0/bitmapOrg.getHeight());
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0,
-                bitmapOrg.getWidth(), bitmapOrg.getHeight(), matrix, true);
+        // tag simpson.png at baidu detected location
+        if(location.getBaidLocation() !=null){
+            tagMap(map, new LatLng(location.getBaidLocation().getLatitude(),location.getBaidLocation().getLongitude()), R.drawable.simpson);
+        }
+    }
 
-        //BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.star);
-
-        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap);
-
-        OverlayOptions option = new MarkerOptions().position(point).icon(bitmapDescriptor);
-        map.addOverlay(option);
-
-
-        MapStatus mapStatus = new MapStatus.Builder().target(point).zoom(mapView.getMap().getMapStatus().zoom).build();
+    private void animateMapToPoint(BaiduMap map, LatLng point) {
+        MapStatus mapStatus = new MapStatus.Builder().target(point).build();
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
         map.animateMapStatus(mapStatusUpdate);
+    }
+
+    private void tagMap(BaiduMap map, LatLng point, int picRes) {
+        Bitmap bitmapOrg_star = BitmapFactory.decodeResource(getResources(), picRes);
+        Matrix matrix = new Matrix();
+        matrix.postScale((float) 30.0 / bitmapOrg_star.getWidth(), (float) 30.0 / bitmapOrg_star.getHeight());
+        Bitmap resizedBitmap_star = Bitmap.createBitmap(bitmapOrg_star, 0, 0,
+                bitmapOrg_star.getWidth(), bitmapOrg_star.getHeight(), matrix, true);
+
+        //BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.star);
+        BitmapDescriptor bitmapDescriptor = BitmapDescriptorFactory.fromBitmap(resizedBitmap_star);
+        OverlayOptions option = new MarkerOptions().position(point).icon(bitmapDescriptor);
+        map.addOverlay(option);
     }
 
     @Override

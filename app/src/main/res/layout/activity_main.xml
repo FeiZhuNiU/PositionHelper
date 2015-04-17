@@ -14,13 +14,13 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/latitudeText"
-            android:text="latitude: "/>
+            android:id="@+id/systemLocationText"
+            android:text="system: "/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/longitudeText"
-            android:text="longitude: "/>
+            android:id="@+id/baiduLocationText"
+            android:text="baidu: "/>
 
         <TextView
             android:layout_width="match_parent"

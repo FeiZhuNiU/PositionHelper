@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +33,10 @@ public class Location {
     private double longitude = 0;
     private Date date;
 
+    private BDLocation baidLocation = null;
+
+
+
     public Date getDate() {
         return date;
     }
@@ -41,6 +49,9 @@ public class Location {
         return longitude;
     }
 
+    public BDLocation getBaidLocation() {
+        return baidLocation;
+    }
 
     private Location(final Context context){
 
@@ -98,7 +109,21 @@ public class Location {
                 Toast.makeText(context,"provider disabled", Toast.LENGTH_SHORT).show();
             }
         };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+
+        BDLocationListener bdLocationListener = new BDLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                baidLocation = bdLocation;
+                Toast.makeText(context, "baidulocationChanged", Toast.LENGTH_SHORT).show();
+                notifyWatchers();
+            }
+
+        };
+        LocationClient locationClient = new LocationClient(context);
+        locationClient.registerLocationListener(bdLocationListener);
+        locationClient.start();
     }
 
 
@@ -122,5 +147,7 @@ public class Location {
             locationWatcher.update();
         }
     }
+
+
 
 }
