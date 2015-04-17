@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements LocationWatcher{
     private TextView updateTimeText;
     private MapView mapView;
 
-    private static Location location = null;
+    private static LocationSensor locationSensor = null;
 
     private static final String TAG ="MainActivity";
 
@@ -48,8 +48,8 @@ public class MainActivity extends Activity implements LocationWatcher{
         mapView         = (MapView)  findViewById(R.id.bmapView);
 
 
-        location = Location.getInstance();
-        location.addWatcher(this);
+        locationSensor = LocationSensor.getInstance();
+        locationSensor.addWatcher(this);
         updateView();
 
     }
@@ -98,9 +98,9 @@ public class MainActivity extends Activity implements LocationWatcher{
     public void updateView(){
 
         //update textView
-        if(location != null ) {
-            locationText.setText("location: " + location.getCity() + " " + String.format("%.3f",location.getLatitude()) + "/" + String.format("%.3f", location.getLongitude()));
-            updateTimeText.setText("Last Update: " + location.getTime());
+        if(locationSensor != null ) {
+            locationText.setText("location: " + locationSensor.getCity() + " " + String.format("%.3f", locationSensor.getLatitude()) + "/" + String.format("%.3f", locationSensor.getLongitude()));
+            updateTimeText.setText("Last Update: " + locationSensor.getTime());
         }
 
         //update Map View
@@ -117,7 +117,7 @@ public class MainActivity extends Activity implements LocationWatcher{
 //        animateMapToPoint(map, point);
 
         // tag simpson.png at baidu detected location
-        LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
+        LatLng point = new LatLng(locationSensor.getLatitude(), locationSensor.getLongitude());
         tagMap(map, point, R.drawable.simpson);
         animateMapToPoint(map, point);
 

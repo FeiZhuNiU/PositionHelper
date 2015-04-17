@@ -1,38 +1,13 @@
 package com.yu.eric.positionhelper;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
-import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
-import com.baidu.location.LocationClient;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by lliyu on 4/15/2015.
+ * Created by lliyu on 4/17/2015.
  */
 public class Location {
 
-    private List<LocationWatcher> watchers;
-
-    private String TAG = "Location";
-
-    private static final Location location = new Location(ContextProvider.getContext());
-
-
-    private double latitude = 0;
-    private double longitude = 0;
-    private String city;
+    private double latitude;
+    private double longitude;
     private String time;
-
-    private BDLocation baidLocation = null;
-
-    public String getTime() {
-        return time;
-    }
 
     public double getLatitude() {
         return latitude;
@@ -42,60 +17,27 @@ public class Location {
         return longitude;
     }
 
-    public BDLocation getBaidLocation() {
-        return baidLocation;
+    public String getTime() {
+        return time;
     }
 
-    public String getCity() {
-        return city;
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
     }
 
-    private Location(final Context context){
-
-        watchers = new ArrayList<>();
-
-        BDLocationListener bdLocationListener = new BDLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                baidLocation = bdLocation;
-                Log.i(TAG, "location changed");
-                Log.i(TAG, "latitude: " + baidLocation.getLatitude());
-                Log.i(TAG, "longitude: " + baidLocation.getLongitude());
-                latitude = baidLocation.getLatitude() + 0.006;
-                longitude = baidLocation.getLongitude() + 0.0065;
-                time = baidLocation.getTime();
-                city = baidLocation.getCity();
-                Toast.makeText(context, "baidulocationChanged", Toast.LENGTH_SHORT).show();
-                notifyWatchers();
-            }
-        };
-        LocationClient locationClient = new LocationClient(context);
-        locationClient.registerLocationListener(bdLocationListener);
-        locationClient.start();
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
-
-    /*
-    *   Singleton pattern
-    *
-    *    http://blog.csdn.net/jason0539/article/details/23297037
-    *
-    * */
-    public static Location getInstance(){
-        return location;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public void addWatcher(LocationWatcher watcher){
-        watchers.add(watcher);
+    public Location(LocationSensor locationSensor){
+        latitude = locationSensor.getLatitude();
+        longitude = locationSensor.getLongitude();
+        time = locationSensor.getTime();
     }
-
-
-    private void notifyWatchers(){
-        for(LocationWatcher locationWatcher : watchers){
-            locationWatcher.update();
-        }
-    }
-
-
+    public Location(){}
 
 }
