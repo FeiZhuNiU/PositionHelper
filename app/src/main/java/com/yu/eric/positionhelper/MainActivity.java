@@ -30,6 +30,7 @@ public class MainActivity extends Activity implements LocationWatcher{
     private MapView mapView;
 
     private static LocationSensor locationSensor = null;
+    private LocationHistory locationHistory;
 
     private static final String TAG ="MainActivity";
 
@@ -50,6 +51,8 @@ public class MainActivity extends Activity implements LocationWatcher{
 
         locationSensor = LocationSensor.getInstance();
         locationSensor.addWatcher(this);
+        locationHistory = new LocationHistory();
+        locationSensor.addWatcher(locationHistory);
         updateView();
 
     }

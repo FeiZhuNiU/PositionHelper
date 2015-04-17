@@ -49,7 +49,7 @@ public class LocationHistory implements LocationWatcher {
 
     @Override
     public void update() {
-        locations.add(new Location(LocationSensor.getInstance()));
+        add(new Location(LocationSensor.getInstance()));
         Toast.makeText(ContextProvider.getContext(), "history: " + locations.size(), Toast.LENGTH_SHORT).show();
     }
 }
