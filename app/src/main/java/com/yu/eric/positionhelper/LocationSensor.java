@@ -68,8 +68,6 @@ public class LocationSensor {
                 time = baidLocation.getTime();
                 city = baidLocation.getCity();
 
-
-
                 Toast.makeText(context, "location Changed", Toast.LENGTH_SHORT).show();
 
                 notifyWatchers();

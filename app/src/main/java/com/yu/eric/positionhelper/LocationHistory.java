@@ -51,5 +51,6 @@ public class LocationHistory implements LocationWatcher {
     public void update() {
         add(new Location(LocationSensor.getInstance()));
         Toast.makeText(ContextProvider.getContext(), "history: " + locations.size(), Toast.LENGTH_SHORT).show();
+        Log.i(TAG,"history size :" + locations.size());
     }
 }
