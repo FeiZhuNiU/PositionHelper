@@ -123,9 +123,10 @@ public class MainActivity extends Activity implements LocationWatcher{
         OverlayOptions option = new MarkerOptions().position(point).icon(bitmapDescriptor);
         map.addOverlay(option);
 
-        MapStatus mapStatus = new MapStatus.Builder().target(point).zoom(12).build();
+
+        MapStatus mapStatus = new MapStatus.Builder().target(point).zoom(mapView.getMap().getMapStatus().zoom).build();
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mapStatus);
-        map.setMapStatus(mapStatusUpdate);
+        map.animateMapStatus(mapStatusUpdate);
     }
 
     @Override
