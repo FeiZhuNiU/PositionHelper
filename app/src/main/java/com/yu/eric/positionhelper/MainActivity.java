@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 
-import com.baidu.location.BDLocation;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -26,7 +25,7 @@ import com.baidu.mapapi.model.LatLng;
 
 public class MainActivity extends Activity implements LocationWatcher{
 
-    private TextView systemLocationText;
+    private TextView locationText;
     private TextView baiduLocationText;
     private TextView updateTime;
     private MapView mapView;
@@ -45,8 +44,7 @@ public class MainActivity extends Activity implements LocationWatcher{
         setContentView(R.layout.activity_main);
 
 
-        systemLocationText = (TextView) findViewById(R.id.systemLocationText);
-        baiduLocationText = (TextView) findViewById(R.id.baiduLocationText);
+        locationText    = (TextView) findViewById(R.id.locationText);
         updateTime      = (TextView) findViewById(R.id.time_updated);
         mapView         = (MapView)  findViewById(R.id.bmapView);
 
@@ -102,11 +100,8 @@ public class MainActivity extends Activity implements LocationWatcher{
 
         //update textView
         if(location != null ) {
-            systemLocationText.setText("system: " + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
-            updateTime.setText("Last Update: " + location.getDate());
-            if(location.getBaidLocation() != null ) {
-                baiduLocationText.setText("baidu: " + String.valueOf(location.getBaidLocation().getLatitude()) + "/" + String.valueOf(location.getBaidLocation().getLongitude()));
-            }
+            locationText.setText("location: " + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
+            updateTime.setText("Last Update: " + location.getTime());
         }
 
         //update Map View
@@ -118,15 +113,15 @@ public class MainActivity extends Activity implements LocationWatcher{
 
         BaiduMap map = mapView.getMap();
 
-        //tag star.png at system detected location
-        LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
-        tagMap(map, point, R.drawable.star);
-        animateMapToPoint(map, point);
+//        //tag star.png at system detected location
+//        tagMap(map, point, R.drawable.star);
+//        animateMapToPoint(map, point);
 
         // tag simpson.png at baidu detected location
-        if(location.getBaidLocation() !=null){
-            tagMap(map, new LatLng(location.getBaidLocation().getLatitude(),location.getBaidLocation().getLongitude()), R.drawable.simpson);
-        }
+        LatLng point = new LatLng(location.getLatitude(),location.getLongitude());
+        tagMap(map, point, R.drawable.simpson);
+        animateMapToPoint(map, point);
+
     }
 
     private void animateMapToPoint(BaiduMap map, LatLng point) {
@@ -136,6 +131,7 @@ public class MainActivity extends Activity implements LocationWatcher{
     }
 
     private void tagMap(BaiduMap map, LatLng point, int picRes) {
+
         Bitmap bitmapOrg_star = BitmapFactory.decodeResource(getResources(), picRes);
         Matrix matrix = new Matrix();
         matrix.postScale((float) 30.0 / bitmapOrg_star.getWidth(), (float) 30.0 / bitmapOrg_star.getHeight());

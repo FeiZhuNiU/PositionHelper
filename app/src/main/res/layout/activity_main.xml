@@ -14,19 +14,15 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/systemLocationText"
-            android:text="system: "/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/baiduLocationText"
-            android:text="baidu: "/>
+            android:id="@+id/locationText"
+            android:text="location: "/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/time_updated"
             android:text="last update: "/>
+
         <com.baidu.mapapi.map.MapView
             android:id="@+id/bmapView"
             android:layout_width="fill_parent"

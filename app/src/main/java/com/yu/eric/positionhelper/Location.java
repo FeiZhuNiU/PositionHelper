@@ -31,14 +31,12 @@ public class Location {
 
     private double latitude = 0;
     private double longitude = 0;
-    private Date date;
+    private String time;
 
     private BDLocation baidLocation = null;
 
-
-
-    public Date getDate() {
-        return date;
+    public String getTime() {
+        return time;
     }
 
     public double getLatitude() {
@@ -57,69 +55,71 @@ public class Location {
 
         watchers = new ArrayList<>();
 
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(android.location.Location location) {
-
-                Log.i(TAG, "locationChanged:");
-                Log.i(TAG, "???" + location.getTime());
-                Log.i(TAG, "???" + location.getLongitude());
-                Log.i(TAG, "???" + location.getLatitude());
-                Log.i(TAG, "???" + location.getAltitude());
-
-
-                Toast.makeText(context, "locationChanged", Toast.LENGTH_SHORT).show();
-                latitude = location.getLatitude();
-                longitude = location.getLongitude();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(location.getTime());
-                date = calendar.getTime();
-                notifyWatchers();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                switch (status) {
-                    //GPS??????
-                    case LocationProvider.AVAILABLE:
-                        Log.i(TAG, "??GPS???????");
-                        break;
-                    //GPS????????
-                    case LocationProvider.OUT_OF_SERVICE:
-                        Log.i(TAG, "??GPS?????????");
-                        break;
-                    //GPS????????
-                    case LocationProvider.TEMPORARILY_UNAVAILABLE:
-                        Log.i(TAG, "??GPS?????????");
-                        break;
-                }
-                Toast.makeText(context," status changed", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                Toast.makeText(context,"provider enabled", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                Toast.makeText(context,"provider disabled", Toast.LENGTH_SHORT).show();
-            }
-        };
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+//        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+//        LocationListener locationListener = new LocationListener() {
+//            @Override
+//            public void onLocationChanged(android.location.Location location) {
+//
+//                Log.i(TAG, "locationChanged:");
+//                Log.i(TAG, "???" + location.getTime());
+//                Log.i(TAG, "???" + location.getLongitude());
+//                Log.i(TAG, "???" + location.getLatitude());
+//                Log.i(TAG, "???" + location.getAltitude());
+//
+//
+//                Toast.makeText(context, "locationChanged", Toast.LENGTH_SHORT).show();
+//                latitude = location.getLatitude();
+//                longitude = location.getLongitude();
+//                Calendar calendar = Calendar.getInstance();
+//                calendar.setTimeInMillis(location.getTime());
+//                date = calendar.getTime();
+//                notifyWatchers();
+//            }
+//
+//            @Override
+//            public void onStatusChanged(String provider, int status, Bundle extras) {
+//
+//                switch (status) {
+//                    //GPS??????
+//                    case LocationProvider.AVAILABLE:
+//                        Log.i(TAG, "??GPS???????");
+//                        break;
+//                    //GPS????????
+//                    case LocationProvider.OUT_OF_SERVICE:
+//                        Log.i(TAG, "??GPS?????????");
+//                        break;
+//                    //GPS????????
+//                    case LocationProvider.TEMPORARILY_UNAVAILABLE:
+//                        Log.i(TAG, "??GPS?????????");
+//                        break;
+//                }
+//                Toast.makeText(context," status changed", Toast.LENGTH_SHORT).show();
+//
+//            }
+//
+//            @Override
+//            public void onProviderEnabled(String provider) {
+//                Toast.makeText(context,"provider enabled", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onProviderDisabled(String provider) {
+//                Toast.makeText(context,"provider disabled", Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
 
         BDLocationListener bdLocationListener = new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 baidLocation = bdLocation;
+                latitude = baidLocation.getLatitude();
+                longitude = baidLocation.getLongitude();
+                time = baidLocation.getTime();
                 Toast.makeText(context, "baidulocationChanged", Toast.LENGTH_SHORT).show();
                 notifyWatchers();
             }
-
         };
         LocationClient locationClient = new LocationClient(context);
         locationClient.registerLocationListener(bdLocationListener);
