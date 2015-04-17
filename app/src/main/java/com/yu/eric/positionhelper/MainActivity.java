@@ -50,9 +50,10 @@ public class MainActivity extends Activity implements LocationWatcher{
 
 
         locationSensor = LocationSensor.getInstance();
-        locationSensor.addWatcher(this);
         locationHistory = new LocationHistory();
         locationSensor.addWatcher(locationHistory);
+        locationSensor.addWatcher(this);
+
         updateView();
 
     }
@@ -103,7 +104,7 @@ public class MainActivity extends Activity implements LocationWatcher{
         //update textView
         if(locationSensor != null ) {
             locationText.setText("location: " + locationSensor.getCity() + " " + String.format("%.3f", locationSensor.getLatitude()) + "/" + String.format("%.3f", locationSensor.getLongitude()));
-            updateTimeText.setText("Last Update: " + locationSensor.getTime());
+            updateTimeText.setText("Last Update: " + locationSensor.getTime() + "    history:" + (locationHistory.getLocations() == null ? "" : locationHistory.getLocations().size()));
         }
 
         //update Map View
