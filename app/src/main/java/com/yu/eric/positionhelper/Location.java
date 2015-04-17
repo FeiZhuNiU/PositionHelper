@@ -1,10 +1,6 @@
 package com.yu.eric.positionhelper;
 
 import android.content.Context;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.LocationProvider;
-import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,8 +9,6 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +25,7 @@ public class Location {
 
     private double latitude = 0;
     private double longitude = 0;
+    private String city;
     private String time;
 
     private BDLocation baidLocation = null;
@@ -51,72 +46,25 @@ public class Location {
         return baidLocation;
     }
 
+    public String getCity() {
+        return city;
+    }
+
     private Location(final Context context){
 
         watchers = new ArrayList<>();
-
-//        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-//        LocationListener locationListener = new LocationListener() {
-//            @Override
-//            public void onLocationChanged(android.location.Location location) {
-//
-//                Log.i(TAG, "locationChanged:");
-//                Log.i(TAG, "???" + location.getTime());
-//                Log.i(TAG, "???" + location.getLongitude());
-//                Log.i(TAG, "???" + location.getLatitude());
-//                Log.i(TAG, "???" + location.getAltitude());
-//
-//
-//                Toast.makeText(context, "locationChanged", Toast.LENGTH_SHORT).show();
-//                latitude = location.getLatitude();
-//                longitude = location.getLongitude();
-//                Calendar calendar = Calendar.getInstance();
-//                calendar.setTimeInMillis(location.getTime());
-//                date = calendar.getTime();
-//                notifyWatchers();
-//            }
-//
-//            @Override
-//            public void onStatusChanged(String provider, int status, Bundle extras) {
-//
-//                switch (status) {
-//                    //GPS??????
-//                    case LocationProvider.AVAILABLE:
-//                        Log.i(TAG, "??GPS???????");
-//                        break;
-//                    //GPS????????
-//                    case LocationProvider.OUT_OF_SERVICE:
-//                        Log.i(TAG, "??GPS?????????");
-//                        break;
-//                    //GPS????????
-//                    case LocationProvider.TEMPORARILY_UNAVAILABLE:
-//                        Log.i(TAG, "??GPS?????????");
-//                        break;
-//                }
-//                Toast.makeText(context," status changed", Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//            @Override
-//            public void onProviderEnabled(String provider) {
-//                Toast.makeText(context,"provider enabled", Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onProviderDisabled(String provider) {
-//                Toast.makeText(context,"provider disabled", Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
 
         BDLocationListener bdLocationListener = new BDLocationListener() {
             @Override
             public void onReceiveLocation(BDLocation bdLocation) {
                 baidLocation = bdLocation;
-                latitude = baidLocation.getLatitude();
-                longitude = baidLocation.getLongitude();
+                Log.i(TAG, "location changed");
+                Log.i(TAG, "latitude: " + baidLocation.getLatitude());
+                Log.i(TAG, "longitude: " + baidLocation.getLongitude());
+                latitude = baidLocation.getLatitude() + 0.006;
+                longitude = baidLocation.getLongitude() + 0.0065;
                 time = baidLocation.getTime();
+                city = baidLocation.getCity();
                 Toast.makeText(context, "baidulocationChanged", Toast.LENGTH_SHORT).show();
                 notifyWatchers();
             }
@@ -128,9 +76,9 @@ public class Location {
 
 
     /*
-    * ???????????????
-    * ???????
-    * ???   http://blog.csdn.net/jason0539/article/details/23297037
+    *   Singleton pattern
+    *
+    *    http://blog.csdn.net/jason0539/article/details/23297037
     *
     * */
     public static Location getInstance(){

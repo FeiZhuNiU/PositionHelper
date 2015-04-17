@@ -26,8 +26,7 @@ import com.baidu.mapapi.model.LatLng;
 public class MainActivity extends Activity implements LocationWatcher{
 
     private TextView locationText;
-    private TextView baiduLocationText;
-    private TextView updateTime;
+    private TextView updateTimeText;
     private MapView mapView;
 
     private static Location location = null;
@@ -45,7 +44,7 @@ public class MainActivity extends Activity implements LocationWatcher{
 
 
         locationText    = (TextView) findViewById(R.id.locationText);
-        updateTime      = (TextView) findViewById(R.id.time_updated);
+        updateTimeText  = (TextView) findViewById(R.id.updateTimeText);
         mapView         = (MapView)  findViewById(R.id.bmapView);
 
 
@@ -100,8 +99,8 @@ public class MainActivity extends Activity implements LocationWatcher{
 
         //update textView
         if(location != null ) {
-            locationText.setText("location: " + String.valueOf(location.getLatitude()) + "/" + String.valueOf(location.getLongitude()));
-            updateTime.setText("Last Update: " + location.getTime());
+            locationText.setText("location: " + location.getCity() + " " + String.format("%.3f",location.getLatitude()) + "/" + String.format("%.3f", location.getLongitude()));
+            updateTimeText.setText("Last Update: " + location.getTime());
         }
 
         //update Map View

@@ -20,7 +20,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/time_updated"
+            android:id="@+id/updateTimeText"
             android:text="last update: "/>
 
         <com.baidu.mapapi.map.MapView

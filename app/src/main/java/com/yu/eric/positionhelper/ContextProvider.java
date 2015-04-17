@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 
 /**
+ *
+ * Global context provider
+ *
  * Created by lliyu on 4/15/2015.
  */
 public class ContextProvider extends Application {
