@@ -11,10 +11,20 @@ import java.util.List;
  */
 public class LocationHistory implements LocationWatcher {
 
+    private static LocationHistory locationHistory = new LocationHistory();
+
+    public static LocationHistory getInstance(){
+        return locationHistory;
+    }
+
     private static String TAG = "LocationHistory";
 
     private List<Location> locations;
     private int maxSize = 10;
+
+    private LocationHistory() {
+        locations = new ArrayList<>();
+    }
 
     public List<Location> getLocations() {
         return locations;
@@ -50,7 +60,7 @@ public class LocationHistory implements LocationWatcher {
     @Override
     public void update() {
         add(new Location(LocationSensor.getInstance()));
-        Toast.makeText(ContextProvider.getContext(), "history: " + locations.size(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(ContextProvider.getContext(), "history added, size: " + locations.size(), Toast.LENGTH_SHORT).show();
         Log.i(TAG,"history size :" + locations.size());
     }
 }

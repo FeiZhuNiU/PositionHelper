@@ -19,7 +19,7 @@ public class LocationSensor {
 
     private List<LocationWatcher> watchers;
 
-    private String TAG = "Location";
+    private String TAG = "LocationSensor";
 
     private static final LocationSensor LOCATION_SENSOR = new LocationSensor(ContextProvider.getContext());
 
@@ -30,7 +30,7 @@ public class LocationSensor {
     private String time;
 
     private BDLocation baidLocation = null;
-    private LocationHistory locationHistory;
+//    private LocationHistory locationHistory;
 
     public String getTime() {
         return time;
@@ -55,7 +55,7 @@ public class LocationSensor {
     private LocationSensor(final Context context){
 
         watchers = new ArrayList<>();
-        locationHistory = new LocationHistory();
+//        locationHistory = new LocationHistory();
 
         BDLocationListener bdLocationListener = new BDLocationListener() {
             @Override
@@ -78,7 +78,7 @@ public class LocationSensor {
         LocationClient locationClient = new LocationClient(context);
         locationClient.registerLocationListener(bdLocationListener);
         LocationClientOption option = new LocationClientOption();
-        option.setScanSpan(10000);
+        option.setScanSpan(3000);
         option.setAddrType("all");
         locationClient.setLocOption(option);
         locationClient.start();
